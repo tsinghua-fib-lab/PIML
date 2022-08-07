@@ -1,0 +1,140 @@
+tags:
+  'collision'
+
+pinnsf_interaction:
+  'sim'
+
+dataset_name:
+  'gc2344'
+
+iter_flag:
+  1
+
+iter_model_name_suffix:
+  7qitpmvy
+
+collision_pred_weight:
+  - 5e-2
+
+reg_weight:
+  - 1e-2
+
+teacher_weight:
+  - 0
+
+collision_loss_weight:
+  - 200
+
+hard_collision_penalty:
+  - 1
+
+collision_focus_weight:
+  - 1
+
+val_coll_weight:
+  - 30
+
+exp_name:
+  '0205-pinnsf_bm-gcdata2104-iter0-ps'
+
+time_decay:
+  - 0.9
+
+learning_rate:
+  - 0.0001
+
+finetune_lr_decay:
+  - 0.02
+
+batch_size:
+  - 128
+
+data_aug:
+  - '[[],[]]'
+
+collision_threshold:
+  0.5
+
+training_mode:
+  - 'normal'
+
+model:
+  - 'pinnsf_bm'
+
+f_batch_size:
+  - 32
+
+weight_decay:
+  1e-6
+
+data_path:
+  './configs/data_configs/data_pretrain4.yaml'
+
+finetune_data_path:
+  './configs/data_configs/data_finetune2.yaml'
+
+dropout:
+  0.5
+
+patience:
+  1
+
+patience_finetune:
+  - 1
+
+epochs:
+  1000
+
+valid_steps:
+  - 10
+
+topk_ped:
+  6
+
+topk_obs:
+  10
+
+sight_angle_ped:
+  - 90
+
+sight_angle_obs:
+  - 90
+
+dist_threshold_ped:
+  4
+
+dist_threshold_obs:
+  4
+
+encoder_hidden_size:
+  128
+
+processor_hidden_size:
+  128
+
+decoder_hidden_size:
+  64
+
+encoder_hidden_layers:
+  3
+
+processor_hidden_layers:
+  16
+
+decoder_hidden_layers:
+  2
+
+add_noise:
+  0
+
+num_history_velocity:
+  1
+
+finetune_flag:
+  1
+
+device:
+  'cuda'
+
+save_configs_flag:
+  1

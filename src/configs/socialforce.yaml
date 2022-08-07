@@ -1,0 +1,78 @@
+data_path:
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time760-820_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time1000-1060_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time1100-1160_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time1280-1340_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time1880-1940_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time1976-2036_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time2040-2100_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time2104-2164_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time2164-2224_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time2224-2284_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time2284-2344_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time1560-1620_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/GC_dataset/GC_Dataset_ped1-12685_time2344-2404_interp9_xrange5-25_yrange15-35.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/UCY_Dataset/UCY_Dataset_time0-54_timeunit0.08.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/UCY_Dataset/UCY_Dataset_time54-108_timeunit0.08.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/UCY_Dataset/UCY_Dataset_time108-162_timeunit0.08.npy'
+  - '/data/zhangguozhen/dataset/pedsim/processed_data/UCY_Dataset/UCY_Dataset_time162-216_timeunit0.08.npy'
+
+exp_name:
+  - socialforce
+
+user_name:
+  Yuzihan
+
+version:
+  'v0.0'
+
+desired_speed_intensity:
+# 1.75
+  2.00
+# 2.50
+
+pedped_repulsive_intensity:
+# 3.1
+  3.3
+# 3.5
+
+pedped_repulsive_radius:
+# 0.3
+  0.4
+# 0.5
+
+# pedped_repulsive_intensity2:
+# 0.06
+#  0.07
+# 0.08
+
+
+
+pedobs_repulsive_intensity:
+  10
+
+pedobs_repulsive_radius:
+  0.2
+
+oversampling:
+  10
+
+max_speed_multiplier:
+# 1.3
+  1.4
+# 1.5
+
+sight_angle_ped:
+  90
+
+seed:
+  666
+
+model:
+  'socialforce'
+
+# visualization:
+#   1
+
+save_path:
+  '/data/zhangguozhen/dataset/pedsim/synthetic_data/social_force/'

@@ -1,0 +1,94 @@
+learning_rate:
+  - 0.0005
+  - 0.0001
+
+batch_size:
+  - 128
+
+weight_decay:
+  - 1e-6
+  - 1e-7
+
+dropout:
+  0.5
+
+exp_name:
+  'base_gcdata_ps_no_ft'
+
+user_name:
+  'guozhen'
+
+num_workers:
+  0
+
+data_path:
+  - './configs/data_configs/data_pretrain_wo_ft.yaml'
+
+finetune_data_path:
+  './configs/data_configs/data_finetune.yaml'
+
+model:
+  'base'
+
+patience:
+  30
+
+epochs:
+  1000
+
+topk_ped:
+  6
+
+topk_obs:
+  10
+
+sight_angle_ped:
+  100
+
+sight_angle_obs:
+  100
+
+dist_threshold_ped:
+  10
+
+dist_threshold_obs:
+  10
+
+train_ratio:
+  0.6
+
+val_ratio:
+  0.2
+
+test_ratio:
+  0.2
+
+encoder_hidden_size:
+  128
+
+processor_hidden_size:
+  128
+
+decoder_hidden_size:
+  64
+
+encoder_hidden_layers:
+  3
+
+processor_hidden_layers:
+  16
+
+decoder_hidden_layers:
+  2
+
+add_noise:
+  0
+
+num_history_velocity:
+  1
+
+finetune_flag:
+  0
+
+correction_hidden_layers:
+  1

@@ -1,0 +1,30 @@
+# input:
+#   '/data/zhangguozhen/dataset/pedsim/origin_data/GC_Dataset/Annotation/'
+
+# output:
+#   '/data/zhangguozhen/dataset/pedsim/processed_data/GC_Dataset/'
+
+ped:
+  12684
+
+duration:
+  60
+
+time:
+  - 760
+  - 1000
+  - 1100
+  - 1280
+  - 1560
+  - 1880
+  - 1976
+  - 2040
+  - 2104
+  - 2164
+  - 2164
+  - 2224
+  - 2284
+  - 2344
+
+range:
+  1

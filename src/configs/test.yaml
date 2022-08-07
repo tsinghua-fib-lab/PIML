@@ -1,0 +1,71 @@
+data_directory:
+  '/data'
+
+lr:
+  - 0.0014
+  - 0.0012
+  - 0.001
+
+weight_decay:
+  0.0058
+
+batch_size:
+  1024
+
+epochs:
+  800
+
+dropout:
+  0.15
+
+patience:
+  50
+
+dataset_path:
+  'sample12_dataset_norm.npy'
+
+model:
+  'cf_churn_dnn_sgat'
+
+n_folds:
+  5
+
+exp_name:
+  s12-cf_churn_dnn_sgat
+
+l_hidden:
+  10
+
+n_hidden:
+  24
+
+causal_weight:
+  0.1
+
+treatment_weight:
+  0.2
+
+imbalance_penalty_t0:
+  0.44
+
+imbalance_penalty_t1:
+  0.9
+
+cf_weight1:
+  0.02
+
+cf_weight2:
+  0.14
+
+scheduler_flag:
+  0
+
+scheduler_step_size:
+  100
+
+scheduler_gamma:
+  0.2
+
+seed:
+  - 444
+  - 555
