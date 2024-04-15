@@ -7,11 +7,9 @@ cd src
 python main.py
 ```
 The result will be saved in the `saved_model` folder. If you want to change the configuration, see the `get_args()` function in `src/main.py` for the available options. Here are some important options:
-```
 - `--finetune_flag` to conduct the finetuning process after training.
-- `--data_config` to set the train, valid and test dataset for training.
-- `--ft_data_config` to set the train, valid and test dataset for finetuning.
-```
+- `--data_config` to set the train, valid, and test dataset for training.
+- `--ft_data_config` to set the train, valid, and test dataset for finetuning.
 
 ### Other Scripts
 - `src/symbolic_regression.py` to conduct symbolic regression for the discovered MLAPM model.
