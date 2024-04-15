@@ -1,12 +1,12 @@
 # PIML
 The official PyTorch implementation of "Physics-infused Machine Learning for Crowd Simulation" (KDD'22)
 
-To run the training, fine-tuning, and testing process, just run 
+To run the training, fine-tuning, and testing process and save the model, just run 
 ```
 cd src
 python main.py
 ```
-In this way, the default configuration will be used. If you want to change the configuration, see the `get_args()` function in `src/main.py` for the available options. Here are some important options:
+The result will be saved in the `saved_model` folder. If you want to change the configuration, see the `get_args()` function in `src/main.py` for the available options. Here are some important options:
 ```
 - `--finetune_flag` to conduct the finetuning process after training.
 - `--data_config` to set the train, valid and test dataset for training.
@@ -42,3 +42,14 @@ tqdm              4.66.2
 - **Synthetic Dataset**: `./data/synthetic_data/*.npy`, e.g., `GC_Dataset_ped1-12685_time1560-1620_interp9_xrange5-25_yrange15-35_simulation.npy`
   -   `GC_Dataset_ped1-12685_time1560-1620_interp9_xrange5-25_yrange15-35`: Refer to the basic scenario.
   -   `simulation: Simulate the basic scenario, where the number of pedestrians and their appearance time, initial position, and destination are the same as in the basic scenario.
+
+For each `*.npy` file, the data is stored in the following format:
+```python
+(metadata, trajectories, destinations, obstacles) = np.load(file_path, allow_pickle=True)
+
+```
+And here is the description of each element:
+- **metadata**: A dictionary that contains the metadata of the dataset.
+- **trajectories**: A list of trajectories. For each trajectory, `np.array(trajectory)` is a `np.array` with shape `(T, 3)`, where `T` is the number of time steps where the pedestrian appears in the scenario, and each row is the x-position, y-position and time of that pedestrian.
+- **destinations**: `np.array(destinations)` is an `np.array` with shape `(N, 1, 3)`, where `N` is the number of pedestrians. `np.array(destinations)[:, 0, :2]` is the xy-position of the destination, while `np.array(destinations)[:, 0, 2]` is the time they reach the destination.
+- **obstacles**: An `np.array` with shape `(M, 2)`, where `M` is the number of obstacle points, and each row is the xy-position of the obstacle.

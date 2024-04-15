@@ -12,18 +12,12 @@ import argparse
 import warnings
 import setproctitle
 import numpy as np
-import matplotlib.pyplot as plt
-import torch.nn.functional as F
-from torch.optim.lr_scheduler import StepLR
-from torch.utils.data import DataLoader
 
 import data.data as DATA
 import data.dataset as DATASET
 import models.simulators as SIMULATOR
-from utils import visualization
-from utils import data_loader as LOADER
-from utils import data_augmentation as AUG
-from utils import utils as UTILS
+import utils.utils as UTILS
+import utils.data_loader as LOADER
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 warnings.filterwarnings("ignore")
@@ -52,7 +46,8 @@ def get_args():
     parser.add_argument('--n_embedding', type=int, default=10, help='embedding size')
     parser.add_argument('--hidden_size', type=int, default=32, help='number of hidden nodes in each layer')
     parser.add_argument('--activation', type=str, default='relu', help='activation')
-    parser.add_argument('--patience', type=int, default=1, help='patience')
+    parser.add_argument('--patience', type=int, default=1, help='patience during training')
+    parser.add_argument('--ft_patience', type=int, default=5, help='patience during finetune')
 
     parser.add_argument('--topk_ped', type=int, default=6, help='top k pedestrians in sight')
     parser.add_argument('--topk_obs', type=int, default=10, help='top k obstacles in sight')
@@ -77,7 +72,6 @@ def get_args():
     parser.add_argument('--correction_hidden_layers', type=int, default=1, help='correction_hidden_layers')
     parser.add_argument('--finetune_lr_decay', type=float, default=1, help='finetune_lr_decay')
     parser.add_argument('--finetune_wd_aug', type=int, default=1, help='')
-    parser.add_argument('--patience_finetune', type=int, default=5, help='')
 
     parser.add_argument('--num_history_velocity', type=int, default=1, help='num_history_velocity')
 

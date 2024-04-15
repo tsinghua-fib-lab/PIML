@@ -69,15 +69,13 @@ class BaseSimulator(DATA.Pedestrians):
     def set_optimizer(self, args):
         self.optimizer = torch.optim.Adam(
             self.model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay)
-        # self.optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, self.model.parameters()),
-        #    lr=args.learning_rate, weight_decay=args.weight_decay)
 
     def set_scheduler(self, args):
         # scheduler = StepLR(optimizer, step_size=args.scheduler_step_size,
         #                    gamma=args.scheduler_gamma)
         self.scheduler = None
 
-    def set_nd_model(self, args):
+    def set_ft_model(self, args):
         if args.model == 'base':
             self.model = MODEL.BaseNDSimModel(args)
         elif args.model == 'base_test':
@@ -107,7 +105,7 @@ class BaseSimulator(DATA.Pedestrians):
         else:
             self.model = self.model.to(args.device)
 
-    def set_nd_optimizer(self, args):
+    def set_ft_optimizer(self, args):
         if args.model in {'base', 'pinnsf_res'}:
             if isinstance(self.model, nn.DataParallel):
                 corrector_params = list(map(id, self.model.module.corrector.parameters()))
@@ -132,7 +130,7 @@ class BaseSimulator(DATA.Pedestrians):
         else:
             raise NotImplementedError('optimizer for {} has not been implemented'.format(args.model))
 
-    def set_nd_scheduler(self, args):
+    def set_ft_scheduler(self, args):
         # scheduler = StepLR(optimizer, step_size=args.scheduler_step_size,
         #                    gamma=args.scheduler_gamma)
         self.scheduler = None
@@ -256,7 +254,7 @@ class BaseSimulator(DATA.Pedestrians):
     def load_model(self, args, set_model=True, finetune_flag=True, load_path=''):
         if set_model:
             if finetune_flag:
-                self.set_nd_model(args)
+                self.set_ft_model(args)
             else:
                 self.set_model(args)
 
@@ -311,15 +309,13 @@ class BaseSimulator(DATA.Pedestrians):
             self.hard_collision_count = 0
 
             self.model.train()
-            loss_log, collision_pred_loss_log, collision_loss_log, hard_collision_loss_log, mse_loss_log, \
-            acc_pred_log, reg_loss_log = [0.] * 7
+            loss_log, collision_pred_loss_log, collision_loss_log, hard_collision_loss_log, mse_loss_log, acc_pred_log, reg_loss_log = [0.] * 7
             n_train = 0
             for batch_idx, batch_data in enumerate(train_loaders):
                 self.optimizer.zero_grad()
                 self.batch_idx = batch_idx
                 if type(batch_data) == DATA.ChanneledTimeIndexedPedData:
-                    loss, mse_loss, collision_loss, hard_collision_loss, collision_pred_loss, acc_pred, \
-                    reg_loss = self.test_multiple_rollouts_for_training(batch_data)
+                    loss, mse_loss, collision_loss, hard_collision_loss, collision_pred_loss, acc_pred, reg_loss = self.test_multiple_rollouts_for_training(batch_data)
                     mse_loss_log += mse_loss.item()
                     collision_pred_loss_log += collision_pred_loss.item()
                     collision_loss_log += collision_loss.item()
@@ -357,9 +353,6 @@ class BaseSimulator(DATA.Pedestrians):
                         acc_pred_log += acc_pred
                         loss = loss + collision_pred_loss
                         collision_pred_loss_log = collision_pred_loss_log + collision_pred_loss.item()
-                    # if len(predictions) > 2:
-                    #     o_msg = predictions[2]
-                    #     loss = loss + self.l1_reg_loss(o_msg, args.reg_weight, 'sum')
                     loss_log += loss.item()
                     mse_loss_log += mse_loss.item()
 
@@ -393,19 +386,11 @@ class BaseSimulator(DATA.Pedestrians):
             if val_loss < min_loss:
                 print("!!!!!!!!!! Model Saved at epoch {} !!!!!!!!!!".format(epoch))
                 self.save_model(args, self.finetune_flag)
-                if self.finetune_flag:  # save cpu version model when fine-tuning only
-                    self.save_model(args, self.finetune_flag, cpu_version=True)
                 min_loss = val_loss
                 patience = 0
             else:
                 patience += 1
-
-            if self.finetune_flag:
-                if patience >= args.patience_finetune:
-                    break
-            else:
-                if patience > args.patience:
-                    break
+                if patience > (args.patience if self.finetune_flag else args.ft_patience): break
 
     def validate(self, val_data):
         if type(val_data) == DATA.PointwisePedData:
@@ -424,9 +409,9 @@ class BaseSimulator(DATA.Pedestrians):
     def finetune(self, train_loaders, val_data, test_data):
         print('\n------------- Finetune -------------')
         args = self.args
-        self.set_nd_model(args)
-        self.set_nd_optimizer(args)
-        self.set_nd_scheduler(args)
+        self.set_ft_model(args)
+        self.set_ft_optimizer(args)
+        self.set_ft_scheduler(args)
 
         # load model
         pretrained_dict = torch.load('../saved_model/{}_{}'.format(
