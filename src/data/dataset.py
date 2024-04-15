@@ -43,19 +43,13 @@ class BaseDataset(object):
         self.raw_data = data
 
     def load_data(self, data_path, add_noise_flag=False):
-        with open(data_path, 'r') as stream:
-            data_paths = yaml.load(stream, Loader=yaml.FullLoader)
-
+        data_paths = yaml.load(open(data_path, 'r'), Loader=yaml.FullLoader)
         data = defaultdict(list)
-        for key in data_paths.keys():
-            for path in data_paths[key]:
+        for key in data_paths.keys(): # train, valid, test
+            for path in data_paths[key]: # path to .npy data
                 tmp_data = RawData()
                 tmp_data.load_trajectory_data(path)
                 data[key].append(tmp_data)
-
-        if add_noise_flag:  # TODO: add noise to training data
-            pass
-
         self.raw_data = data
 
     @staticmethod
@@ -116,13 +110,10 @@ class PointwisePedDataset(BaseDataset):
         super(PointwisePedDataset, self).__init__()
 
     def build_dataset(self, args):
-        """
-        """
-        assert (self.raw_data), 'Error: Must load raw data before build dataset.'
-
-        self.args = args
+        assert self.raw_data, 'Error: Must load raw data before build dataset.'
         self.time_unit = self.raw_data['train'][0].time_unit
-        args.time_unit = self.time_unit
+        assert all(self.time_unit == d.time_unit for a in self.raw_data.values() for d in a), 'Error: time unit not {}'.format(args.time_unit)
+        self.args = args
 
         self.dataset = defaultdict(list)
         for key in self.raw_data.keys():

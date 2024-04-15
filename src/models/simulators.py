@@ -4,10 +4,10 @@
 
 """
 
+import os
 import sys
 import time
 
-import mlflow
 import numpy as np
 import torch
 import torch.nn as nn
@@ -36,7 +36,6 @@ class BaseSimulator(DATA.Pedestrians):
 
         train_params = list(filter(lambda x: x.requires_grad, self.model.parameters()))
         print('#Trainable Parameters:', np.sum([p.numel() for p in train_params]))
-        mlflow.log_param('param_num', np.sum([p.numel() for p in train_params]))
 
     def set_model(self, args):
         print('\n------------- Initialize Model -------------')
@@ -279,7 +278,8 @@ class BaseSimulator(DATA.Pedestrians):
         self.model.load_state_dict(loaded_dict)
 
     def save_model(self, args, finetune_flag=True, cpu_version=False):
-        save_path = '../saved_model/{}_{}'.format(args.exp_name, args.model_name_suffix)
+        os.makedirs('../saved_model', exist_ok=True)
+        save_path = f'../saved_model/{args.exp_name}_{args.model_name_suffix}'
         if finetune_flag:
             save_path += '_finetuned'
         if cpu_version:
@@ -385,13 +385,6 @@ class BaseSimulator(DATA.Pedestrians):
             if self.finetune_flag:
                 print('training collision count hard/soft: {} & {}'.format(self.hard_collision_count,
                                                                            self.collision_count))
-                mlflow.log_metric(key='f_epoch', value=epoch, step=epoch)
-                mlflow.log_metric(key='f_train_loss', value=loss_log, step=epoch)
-                mlflow.log_metric(key='f_train_mse', value=train_mse, step=epoch)
-            else:
-                mlflow.log_metric(key='epoch', value=epoch, step=epoch)
-                mlflow.log_metric(key='train_loss', value=loss_log, step=epoch)
-                mlflow.log_metric(key='train_mse', value=train_mse, step=epoch)
 
             val_loss, val_mse = self.validate(val_data)
             if test_data:
@@ -425,12 +418,6 @@ class BaseSimulator(DATA.Pedestrians):
         print("Time {:.4f} -- Validation loss:{}, val_mse:{}".format(
             self.time_iter, val_loss, val_mse))
 
-        if self.finetune_flag:
-            mlflow.log_metric(key='f_val_loss', value=val_loss, step=self.epoch)
-            mlflow.log_metric(key='f_val_mse', value=val_mse, step=self.epoch)
-        else:
-            mlflow.log_metric(key='val_loss', value=val_loss, step=self.epoch)
-            mlflow.log_metric(key='val_mse', value=val_mse, step=self.epoch)
 
         return val_loss, val_mse
 
@@ -574,28 +561,8 @@ class BaseSimulator(DATA.Pedestrians):
 
         # todo: logging部分应该剥离出去
         if test_flag:
-            if self.finetune_flag:
-                mlflow.log_metric(key='f_multiple_test_loss', value=loss)
-                mlflow.log_metric(key='f_multiple_test_mse', value=mse)
-                mlflow.log_metric(key='f_multiple_test_mae', value=mae)
-                mlflow.log_metric(key='f_multiple_test_ot', value=ot)
-                mlflow.log_metric(key='f_multiple_test_mmd', value=mmd)
-                mlflow.log_metric(key='f_multiple_test_collision', value=collision_sum)
-                mlflow.log_metric(key='f_multiple_test_hard_collision', value=hard_collision_sum)
-            else:
-                mlflow.log_metric(key='multiple_test_loss', value=loss)
-                mlflow.log_metric(key='multiple_test_mse', value=mse)
-                mlflow.log_metric(key='multiple_test_mae', value=mae)
-                mlflow.log_metric(key='multiple_test_ot', value=ot)
-                mlflow.log_metric(key='multiple_test_mmd', value=mmd)
-                mlflow.log_metric(key='multiple_test_collision', value=collision_sum)
-
             print('---------------------------------------')
             print("Test loss:{}, test_mse:{}, test_mae:{}, test ot:{}, test mmd:{}".format(loss, mse, mae, ot, mmd))
-
-        else:
-            mlflow.log_metric(key='f_val_collision', value=collision_sum)
-            mlflow.log_metric(key='f_val_hard_collision', value=hard_collision_sum)
 
         print('test/val collision count hard/soft: {} & {}'.format(hard_collision_sum, collision_sum))
 
